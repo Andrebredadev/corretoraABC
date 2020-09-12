@@ -10,7 +10,8 @@
 <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.stock.min.js"></script>
 <script type="text/javascript">
 window.onload = function () {
-  var dataPoints1 = [], dataPoints2 = [];
+  var dataPoints1 = []; 
+  var dataPoints2 = [];
   var stockChart = new CanvasJS.StockChart("chartContainer",{
     exportEnabled: true,
     title:{
@@ -66,10 +67,87 @@ window.onload = function () {
     }
     stockChart.render();
   });
-}
+
+  var dataPoints = [];
+  var dps1 = []; 
+  var dps2 = [];
+  var emaChart = new CanvasJS.StockChart("stockChartContainer", {
+    exportEnabled: true,
+    title: {
+      text:"Grafico EMA"
+    },
+    subtitles: [{
+      text:"EMA Magazine Luisa"
+    }],
+
+    legend: {
+        cursor: "pointer",
+        verticalAlign: "top",
+        itemclick: function (e) {
+          if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+            e.dataSeries.visible = false;
+          } else {
+            e.dataSeries.visible = true;
+          }
+          e.chart.render();
+        }
+      },
+    
+    charts: [{
+      axisX: {
+        crosshair: {
+          enabled: true,
+          snapToDataPoint: true,
+          valueFormatString: "MMM YYYY"
+        }
+      },
+      axisY: {
+        title: "BRL",
+        prefix: "R$",        
+        crosshair: {          
+          enabled: true,
+          snapToDataPoint: true,
+          valueFormatString: "R$#,###.00",
+        }
+      },
+      data: [{
+        type: "line",
+        xValueFormatString: "MMM YYYY",
+        yValueFormatString: "R$#,###.##",
+        dataPoints : dataPoints
+      }]
+    }],
+    navigator: {
+      slider: {
+        minimum: new Date(2010, 00, 01),
+        maximum: new Date(2018, 00, 01)
+      }
+    }
+  });
+  $.getJSON("https://api.jsonbin.io/b/5f5aa6ad7243cd7e8239e194", function(data) {
+    for(var i = 0; i < data.length; i++){     
+      dps1.push({x: new Date(data[i].Date), y: [Number(data[i].Open), Number(data[i].High), Number(data[i].Low), Number(data[i].Close)]});
+      dps2.push({x: new Date(data[i].Date), y: [Number(data[i].Open), Number(data[i].High), Number(data[i].Low), Number(data[i].Close)]});
+    }
+    emaChart.render();
+ 	var ema8 = calculateEMA(dps1, 8);
+    emaChart.charts[0].addTo("data", {type: "line", name: "EMA 8", showInLegend: true, yValueFormatString: "R$#,###.##", dataPoints: ema8});
+  });
+  var ema17 = calculateEMA(dps1, 17)
+  emaChart.charts[0].addTo("data", {type: "line", name: "EMA 17", showInLegend: true, yValueFormatString: "R$#,###.##", dataPoints: ema17});
+  function calculateEMA(dps,count) {
+    var k = 2/(count + 1);
+    var emaDps = [{x: dps[0].x, y: dps[0].y.length ? dps[0].y[3] : dps[0].y}];
+    for (var i = 1; i < dps.length; i++) {
+      emaDps.push({x: dps[i].x, y: (dps[i].y.length ? dps[i].y[3] : dps[i].y) * k + emaDps[i - 1].y * (1 - k)});
+    }
+    return emaDps;
+  }
+} 
 </script>
 </head>
 <body>
 <div id="chartContainer" style="height: 450px; width: 100%;"></div>
+<div id="stockChartContainer" style="height: 450px; width: 100%;"></div>
 </body>
 </html>
