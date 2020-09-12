@@ -142,14 +142,14 @@ window.onload = function () {
       dps3.push({x: new Date(data[i].Date), y: [Number(data[i].Open), Number(data[i].High), Number(data[i].Low), Number(data[i].Close)]});      
     }
     emaChart.render();
- 	var ema8 = calculateEMA(dps1, 8);
-    emaChart.charts[0].addTo("data", {type: "line", name: "EMA 8", showInLegend: true, yValueFormatString: "R$#,###.##", dataPoints: ema8});
+ 	var ema8 = calculateEMA(dps1, 9);
+    emaChart.charts[0].addTo("data", {type: "line", name: "EMA 9", showInLegend: true, yValueFormatString: "R$#,###.##", dataPoints: ema8});
     
-    var ema17 = calculateEMA(dps2, 17)
-    emaChart.charts[0].addTo("data", {type: "line", name: "EMA 17", showInLegend: true, yValueFormatString: "R$#,###.##", dataPoints: ema17});
+    var ema17 = calculateEMA(dps2, 12)
+    emaChart.charts[0].addTo("data", {type: "line", name: "EMA 12", showInLegend: true, yValueFormatString: "R$#,###.##", dataPoints: ema17});
 
-    var ema34 = calculateEMA(dps3, 34)
-    emaChart.charts[0].addTo("data", {type: "line", name: "EMA 34", showInLegend: true, yValueFormatString: "R$#,###.##", dataPoints: ema34}); 
+    var ema34 = calculateEMA(dps3, 26)
+    emaChart.charts[0].addTo("data", {type: "line", name: "EMA 26", showInLegend: true, yValueFormatString: "R$#,###.##", dataPoints: ema34}); 
     
   });  
   
