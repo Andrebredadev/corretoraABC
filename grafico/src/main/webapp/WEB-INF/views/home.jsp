@@ -69,8 +69,7 @@ window.onload = function () {
   });
 
   var dataPoints = [];
-  var dps1 = []; 
-  var dps2 = [];
+  var dps1 = [], dps2 = [], dps3 = [];
   var emaChart = new CanvasJS.StockChart("stockChartContainer", {
     exportEnabled: true,
     title: {
@@ -110,12 +109,22 @@ window.onload = function () {
           valueFormatString: "R$#,###.00",
         }
       },
+      axisY2: {
+          title: "BRL",
+          prefix: "R$",        
+          crosshair: {          
+            enabled: true,
+            snapToDataPoint: true,
+            valueFormatString: "R$#,###.00",
+          }
+        },
       data: [{
         type: "line",
         xValueFormatString: "MMM YYYY",
         yValueFormatString: "R$#,###.##",
         dataPoints : dataPoints
       }]
+        
     }],
     navigator: {
       slider: {
@@ -128,13 +137,22 @@ window.onload = function () {
     for(var i = 0; i < data.length; i++){     
       dps1.push({x: new Date(data[i].Date), y: [Number(data[i].Open), Number(data[i].High), Number(data[i].Low), Number(data[i].Close)]});
       dps2.push({x: new Date(data[i].Date), y: [Number(data[i].Open), Number(data[i].High), Number(data[i].Low), Number(data[i].Close)]});
+      dps3.push({x: new Date(data[i].Date), y: [Number(data[i].Open), Number(data[i].High), Number(data[i].Low), Number(data[i].Close)]});      
     }
     emaChart.render();
  	var ema8 = calculateEMA(dps1, 8);
     emaChart.charts[0].addTo("data", {type: "line", name: "EMA 8", showInLegend: true, yValueFormatString: "R$#,###.##", dataPoints: ema8});
-  });
-  var ema17 = calculateEMA(dps1, 17)
-  emaChart.charts[0].addTo("data", {type: "line", name: "EMA 17", showInLegend: true, yValueFormatString: "R$#,###.##", dataPoints: ema17});
+
+    var ema17 = calculateEMA(dps2, 17)
+    emaChart.charts[0].addTo("data", {type: "line", name: "EMA 17", showInLegend: true, yValueFormatString: "R$#,###.##", dataPoints: ema17});
+
+    var ema34 = calculateEMA(dps3, 34)
+    emaChart.charts[0].addTo("data", {type: "line", name: "EMA 34", showInLegend: true, yValueFormatString: "R$#,###.##", dataPoints: ema34});
+    
+
+    
+  });  
+  
   function calculateEMA(dps,count) {
     var k = 2/(count + 1);
     var emaDps = [{x: dps[0].x, y: dps[0].y.length ? dps[0].y[3] : dps[0].y}];
