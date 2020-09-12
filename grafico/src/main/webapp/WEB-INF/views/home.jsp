@@ -78,19 +78,6 @@ window.onload = function () {
     subtitles: [{
       text:"EMA Magazine Luisa"
     }],
-
-    legend: {
-        cursor: "pointer",
-        verticalAlign: "top",
-        itemclick: function (e) {
-          if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
-            e.dataSeries.visible = false;
-          } else {
-            e.dataSeries.visible = true;
-          }
-          e.chart.render();
-        }
-      },
     
     charts: [{
       axisX: {
@@ -100,6 +87,21 @@ window.onload = function () {
           valueFormatString: "MMM YYYY"
         }
       },
+
+      legend: {
+          cursor: "pointer",
+          verticalAlign: "top",
+          horizontalAlign: "right",          
+          itemclick: function (e) {
+            if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+              e.dataSeries.visible = false;
+            } else {
+              e.dataSeries.visible = true;
+            }
+            e.chart.render();
+          }
+        },
+      
       axisY: {
         title: "BRL",
         prefix: "R$",        
@@ -122,7 +124,7 @@ window.onload = function () {
         type: "line",
         xValueFormatString: "MMM YYYY",
         yValueFormatString: "R$#,###.##",
-        dataPoints : dataPoints
+        dataPoints : dps1
       }]
         
     }],
@@ -142,14 +144,12 @@ window.onload = function () {
     emaChart.render();
  	var ema8 = calculateEMA(dps1, 8);
     emaChart.charts[0].addTo("data", {type: "line", name: "EMA 8", showInLegend: true, yValueFormatString: "R$#,###.##", dataPoints: ema8});
-
+    
     var ema17 = calculateEMA(dps2, 17)
     emaChart.charts[0].addTo("data", {type: "line", name: "EMA 17", showInLegend: true, yValueFormatString: "R$#,###.##", dataPoints: ema17});
 
     var ema34 = calculateEMA(dps3, 34)
-    emaChart.charts[0].addTo("data", {type: "line", name: "EMA 34", showInLegend: true, yValueFormatString: "R$#,###.##", dataPoints: ema34});
-    
-
+    emaChart.charts[0].addTo("data", {type: "line", name: "EMA 34", showInLegend: true, yValueFormatString: "R$#,###.##", dataPoints: ema34}); 
     
   });  
   
